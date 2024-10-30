@@ -41,6 +41,7 @@
 
 <script>
 import { getMovieByID, deleteMovie, editMovie } from '../../services/moviesService.js';
+import { getAllActors } from '../../services/actorsService.js'
 import ConfirmDeleteComponent from '../../components/ConfirmDeleteComponent.vue';
 
 export default {
@@ -50,9 +51,10 @@ export default {
             title: '',
             score: null,
             synopsis: '',
+            allActors: '',
             msg: '',
             loading: false,
-            showModal: false
+            showModal: false,
         }
     },
     methods: {
@@ -64,7 +66,8 @@ export default {
                     "idcod": this.id,
                     "param1": this.title,
                     "param2": this.score.toString(),
-                    "param3": this.synopsis
+                    "param3": this.synopsis,
+                    "param4": this.actors,
                 }
                 await editMovie(data)
                 this.loading = false;
@@ -87,13 +90,17 @@ export default {
         }
     },
     async created() {
+        let actorsRes = await getAllActors();
+        this.allActors = actorsRes;
+
         this.msg = '';
         this.loading = true;
-        let res = await getMovieByID(this.$route.params.id)
-        console.log(res);
-        this.title = res.param1;
-        this.score = res.param2;
-        this.synopsis = res.param3
+        let moviesRes = await getMovieByID(this.$route.params.id)
+        console.log(moviesRes);
+        this.title = moviesRes.param1;
+        this.score = moviesRes.param2;
+        this.synopsis = moviesRes.param3;
+        this.allActors = moviesRes.param4;
         this.loading = false;
     },
     components: {
