@@ -1,21 +1,43 @@
 <template>
   <div class="background">
     <nav class="navbar navbar-expand-lg navbar-light bg-primary shadow-sm sticky-top">
-      <div class="container-fluid">
-        <router-link class="navbar-brand text-white" to="/">Movie Reviews</router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="container-fluid d-flex justify-content-between">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
             <li class="nav-item">
               <router-link class="nav-link text-white" to="/">Inicio</router-link>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link text-white" :to="{ name: 'movies-list' }">Lista de Películas</router-link>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Películas
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'movies-list' }">Lista de Películas</router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'movies-create' }">Nueva Película</router-link>
+                </li>
+              </ul>
             </li>
-            <li class="nav-item">
-              <router-link class="nav-link text-white" :to="{ name: 'movies-create' }">Nueva Película</router-link>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Actores
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'actors-list' }">Lista de Actores</router-link>
+                </li>
+                <li>
+                  <router-link class="dropdown-item" :to="{ name: 'actors-create' }">Nuevo Actor</router-link>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
@@ -33,8 +55,19 @@
 
 
 <style scoped>
-  .background{
+.background {
   background-color: #e5e5e5;
 
+}
+
+@media (min-width: 992px) {
+
+  /* Ajusta según el tamaño de pantalla que desees */
+  .navbar-nav {
+    justify-content: center;
+    /* Centra el contenido del navbar */
+    width: 100%;
+    /* Asegura que ocupe todo el ancho del contenedor */
   }
+}
 </style>
