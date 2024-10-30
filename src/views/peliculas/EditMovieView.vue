@@ -23,7 +23,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
             <div class="mt-3">
-                <button @click="handleDelete" class="btn btn-danger w-100">Eliminar Película</button>
+                <button @click.prevent="showModal = true" class="btn btn-danger w-100">Eliminar Película</button>
             </div>
         </template>
         <template v-else>
@@ -32,6 +32,8 @@
             </div>
         </template>
     </form>
+    <ConfirmDeleteComponent :isOpen="showModal" message="Por favor, confirme que quiere eliminar la Pelicula" @confirm="onConfirmDelete"
+        @cancel="onCancelDelete"></ConfirmDeleteComponent>
 </template>
 
 
@@ -39,6 +41,7 @@
 
 <script>
 import { getMovieByID, deletMovie, editMovie } from '../../services/moviesService';
+import ConfirmDeleteComponent from '../../components/ConfirmDeleteComponent.vue';
 
 export default {
     data() {
@@ -49,6 +52,7 @@ export default {
             synopsis: '',
             msg: '',
             loading: false,
+            showModal: false
         }
     },
     methods: {
@@ -70,12 +74,16 @@ export default {
                 this.msg = 'Ha ocurrido un error mientras se cargaba la pelicula'
             }
         },
-        async handleDelete() {
-            await deletMovie(this.id);
-            this.$router.push({ name: 'movies-list' })
-        },
         handleClose() {
             this.$router.push({ name: 'movies-list' })
+        },
+        async onConfirmDelete() {
+            this.showModal = false;
+            await deletMovie(this.id);
+            this.handleClose()
+        },
+        onCancelDelete() {
+            this.showModal = false;
         }
     },
     async created() {
@@ -87,6 +95,9 @@ export default {
         this.score = res.param2;
         this.synopsis = res.param3
         this.loading = false;
+    },
+    components: {
+        ConfirmDeleteComponent
     },
 }
 </script>

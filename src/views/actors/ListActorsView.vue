@@ -10,7 +10,8 @@
             <span>{{ msg }}</span>
             <div class="overflow-auto" style="max-height: 70vh;">
                 <ul v-if="!loading && actors.length > 0" class="list-group">
-                    <li v-for="actor in actors" :key="actor.idcod" class="list-group-item d-flex justify-content-between align-items-center">
+                    <li v-for="actor in actors" :key="actor.idcod"
+                        class="list-group-item d-flex justify-content-between align-items-center">
                         <p class="mb-0">{{ actor.param1 }}</p>
                         <router-link :to="{ name: 'actors-edit', params: { id: actor.idcod } }">
                             <button class="btn btn-primary btn-sm">Editar</button>
@@ -36,7 +37,7 @@
 
 
 <script>
-import { getAllActors, deletActor } from '../../services/actorsService';
+import { getAllActors } from '../../services/actorsService';
 
 export default {
     data() {

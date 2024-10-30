@@ -34,7 +34,7 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
             <div class="mt-3">
-                <button @click="handleDelete" class="btn btn-danger w-100">Eliminar Actor</button>
+                <button @click.prevent="showModal = true" class="btn btn-danger w-100">Eliminar Actor</button>
             </div>
         </template>
         <template v-else>
@@ -43,6 +43,8 @@
             </div>
         </template>
     </form>
+    <ConfirmDeleteComponent :isOpen="showModal" message="Por favor, confirme que quiere eliminar el actor" @confirm="onConfirmDelete"
+        @cancel="onCancelDelete"></ConfirmDeleteComponent>
 </template>
 
 
@@ -50,6 +52,7 @@
 
 <script>
 import { getActorByID, deletActor, editActor } from '../../services/ActorsService';
+import ConfirmDeleteComponent from '../../components/ConfirmDeleteComponent.vue';
 
 export default {
     data() {
@@ -60,6 +63,7 @@ export default {
             country: '',
             msg: '',
             loading: false,
+            showModal: false
         }
     },
     methods: {
@@ -71,19 +75,15 @@ export default {
                     "idcod": this.id,
                     "param1": this.name,
                     "param2": this.formatToSpaces(this.birthday),
-                    "param3": this.country
+                    "param3": this.country,
                 }
-                await editActor(data)
+                await editActor(data);
                 this.loading = false;
-                this.msg = 'Se ha modificado el actor correctamente'
+                this.msg = 'Se ha modificado el actor correctamente';
             } catch (error) {
                 this.loading = false;
-                this.msg = 'Ha ocurrido un error mientras se cargaba el actor'
+                this.msg = 'Ha ocurrido un error mientras se cargaba el actor';
             }
-        },
-        async handleDelete() {
-            await deletActor(this.id);
-            this.$router.push({ name: 'actors-list' })
         },
         handleClose() {
             this.$router.push({ name: 'actors-list' })
@@ -93,6 +93,14 @@ export default {
         },
         formatToDashes(dateStr) {
             return dateStr.replace(/ /g, '-');
+        },
+        async onConfirmDelete() {
+            this.showModal = false;
+            await deletActor(this.id);
+            this.this.handleClose()
+        },
+        onCancelDelete() {
+            this.showModal = false;
         }
     },
     async created() {
@@ -103,6 +111,9 @@ export default {
         this.birthday = this.formatToDashes(res.param2);
         this.country = res.param3
         this.loading = false;
+    },
+    components: {
+        ConfirmDeleteComponent
     },
 }
 </script>

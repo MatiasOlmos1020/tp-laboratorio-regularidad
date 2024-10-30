@@ -32,7 +32,6 @@
                     </select>
                 </div>
             </div>
-            {{ birthday }}
             <button type="submit" class="btn btn-primary w-100">Enviar Actor</button>
         </template>
         <template v-else>
