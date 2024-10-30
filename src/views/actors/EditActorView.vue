@@ -1,29 +1,40 @@
 <template>
     <form @submit.prevent="handleSubmit" class="p-4 bg-light rounded shadow-sm position-relative">
-        <router-link :to="{ name: 'actors-list' }" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></router-link>
-        <h4 class="mb-4 text-center">Editar Película</h4>
+        <router-link :to="{ name: 'actors-list' }" class="btn-close position-absolute top-0 end-0 m-2"
+            aria-label="Close"></router-link>
+        <h4 class="mb-4 text-center">Editar Actor</h4>
         <span>{{ msg }}</span>
         <template v-if="!loading">
-            <div class="mb-3">
-                <label class="form-label" for="title">Nombre</label>
-                <input v-model="title" type="text" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Puntuación</label>
-                <div class="d-flex align-items-center gap-2">
-                    <label v-for="i in 5" :key="i" class="form-check form-check-inline">
-                        <input v-model="score" :value="i" type="radio" class="form-check-input" name="score" />
-                        <span class="form-check-label">{{ i }}</span>
-                    </label>
+            <div class="row">
+                <div class="mb-3 col-12">
+                    <label class="form-label" for="name">Nombre</label>
+                    <input v-model="name" type="text" class="form-control" id="name"
+                        placeholder="Introduce el nombre de la actor" />
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="synopsis">Sinopsis</label>
-                <textarea v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
+                <div class="mb-3 col-6">
+                    <label class="form-label" for="birthday">Fecha de Nacimiento</label>
+                    <input v-model="birthday" type="date" class="form-control" id="birthday" />
+                </div>
+                <div class="mb-3 col-6">
+                    <label class="form-label" for="country">Nacionalidad</label>
+                    <select v-model="country" class="form-select" id="country">
+                        <option disabled value="">Selecciona la nacionalidad del actor</option>
+                        <option value="Argentina">Argentina</option>
+                        <option value="Estados Unidos">Estados Unidos</option>
+                        <option value="Canadá">Canadá</option>
+                        <option value="Inglaterra">Inglaterra</option>
+                        <option value="España">España</option>
+                        <option value="Francia">Francia</option>
+                        <option value="Italia">Italia</option>
+                        <option value="Japón">Japón</option>
+                        <option value="Corea del Sur">Corea del Sur</option>
+                        <option value="India">India</option>
+                    </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
             <div class="mt-3">
-                <button @click="handleDelete" class="btn btn-danger w-100">Eliminar Película</button>
+                <button @click="handleDelete" class="btn btn-danger w-100">Eliminar Actor</button>
             </div>
         </template>
         <template v-else>
@@ -44,9 +55,9 @@ export default {
     data() {
         return {
             id: this.$route.params.id,
-            title: '',
-            score: null,
-            synopsis: '',
+            name: '',
+            birthday: '',
+            country: '',
             msg: '',
             loading: false,
         }
@@ -58,34 +69,39 @@ export default {
                 this.loading = true;
                 let data = {
                     "idcod": this.id,
-                    "param1": this.title,
-                    "param2": this.score.toString(),
-                    "param3": this.synopsis
+                    "param1": this.name,
+                    "param2": this.formatToSpaces(this.birthday),
+                    "param3": this.country
                 }
                 await editActor(data)
                 this.loading = false;
-                this.msg = 'Se ha modificado la pelicula correctamente'
+                this.msg = 'Se ha modificado el actor correctamente'
             } catch (error) {
                 this.loading = false;
-                this.msg = 'Ha ocurrido un error mientras se cargaba la pelicula'
+                this.msg = 'Ha ocurrido un error mientras se cargaba el actor'
             }
         },
         async handleDelete() {
-            await deletACtor(this.id);
+            await deletActor(this.id);
             this.$router.push({ name: 'actors-list' })
         },
         handleClose() {
             this.$router.push({ name: 'actors-list' })
+        },
+        formatToSpaces(dateStr) {
+            return dateStr.replace(/-/g, ' ');
+        },
+        formatToDashes(dateStr) {
+            return dateStr.replace(/ /g, '-');
         }
     },
     async created() {
         this.msg = '';
         this.loading = true;
         let res = await getActorByID(this.$route.params.id)
-        console.log(res);
-        this.title = res.param1;
-        this.score = res.param2;
-        this.synopsis = res.param3
+        this.name = res.param1;
+        this.birthday = this.formatToDashes(res.param2);
+        this.country = res.param3
         this.loading = false;
     },
 }

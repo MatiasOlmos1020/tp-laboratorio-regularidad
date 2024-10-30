@@ -8,9 +8,9 @@
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <router-link class="nav-link text-white" to="/">Inicio</router-link>
-            </li>
+            </li> -->
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
@@ -61,13 +61,9 @@
 }
 
 @media (min-width: 992px) {
-
-  /* Ajusta según el tamaño de pantalla que desees */
   .navbar-nav {
     justify-content: center;
-    /* Centra el contenido del navbar */
     width: 100%;
-    /* Asegura que ocupe todo el ancho del contenedor */
   }
 }
 </style>
