@@ -1,40 +1,44 @@
 <template>
-    <form @submit.prevent="handleSubmit" class="p-4 bg-light rounded shadow-sm">
+    <form @submit.prevent="handleSubmit" class="p-4 bg-light rounded shadow-sm position-relative">
+        <router-link :to="{ name: 'movies-list' }" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></router-link>
+        <h4 class="mb-4 text-center">Editar Película</h4>
         <span>{{ msg }}</span>
         <template v-if="!loading">
             <div class="mb-3">
                 <label class="form-label" for="title">Nombre</label>
-                <input v-model="title" type="text" class="form-control" id="title">
+                <input v-model="title" type="text" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
             </div>
             <div class="mb-3">
                 <label class="form-label">Puntuación</label>
                 <div class="d-flex align-items-center gap-2">
                     <label v-for="i in 5" :key="i" class="form-check form-check-inline">
-                        <input v-model="score" :value="i" type="radio" class="form-check-input" name="score">
+                        <input v-model="score" :value="i" type="radio" class="form-check-input" name="score" />
                         <span class="form-check-label">{{ i }}</span>
                     </label>
                 </div>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="synopsis">Sinopsis</label>
-                <textarea v-model="synopsis" type="textbox" class="form-control" id="synopsis"></textarea>
+                <textarea v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
+            <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
             <div class="mt-3">
-
-                <button @click="handleDelete" class="btn btn-danger w-100">Delete</button>
+                <button @click="handleDelete" class="btn btn-danger w-100">Eliminar Película</button>
             </div>
         </template>
         <template v-else>
-            <div class="mb-3">
+            <div class="mb-3 text-center">
                 <span>Cargando...</span>
             </div>
         </template>
     </form>
 </template>
 
+
+
+
 <script>
-import { createMovie, getMovieByID, deletMovie, editMovie } from '../services/moviesService';
+import { getMovieByID, deletMovie, editMovie } from '../../services/moviesService';
 
 export default {
     data() {
@@ -50,10 +54,10 @@ export default {
     methods: {
         async handleSubmit() {
             try {
-                this.msg= '';
+                this.msg = '';
                 this.loading = true;
                 let data = {
-                    "idcod" : this.id,
+                    "idcod": this.id,
                     "param1": this.title,
                     "param2": this.score.toString(),
                     "param3": this.synopsis
@@ -68,15 +72,21 @@ export default {
         },
         async handleDelete() {
             await deletMovie(this.id);
-            this.$router.push('/list')
+            this.$router.push({ name: 'movies-list' })
         },
+        handleClose() {
+            this.$router.push({ name: 'movies-list' })
+        }
     },
     async created() {
+        this.msg = '';
+        this.loading = true;
         let res = await getMovieByID(this.$route.params.id)
         console.log(res);
         this.title = res.param1;
         this.score = res.param2;
         this.synopsis = res.param3
+        this.loading = false;
     },
 }
 </script>

@@ -1,25 +1,32 @@
 import { createRouter, createWebHistory } from "vue-router";
-import CreateView from "../views/CreateMovieView.vue"
-import ListMoviesView from "../views/ListMoviesView.vue";
-import EditMovieView from "../views/EditMovieView.vue";
+import CreateView from "../views/peliculas/CreateMovieView.vue"
+import ListMoviesView from "../views/peliculas/ListMoviesView.vue";
+import EditMovieView from "../views/peliculas/EditMovieView.vue";
 
 const routes = [
-    
+
+
     {
-        path: '/create',
-        name: 'create',
-        component: CreateView
+        path: '/movies',
+        name: 'movies',
+        children: [
+            {
+                path: '/movies/create',
+                name: 'movies-create',
+                component: CreateView
+            },
+            {
+                path: '/movies/list',
+                name: 'movies-list',
+                component: ListMoviesView
+            },
+            {
+                path: '/movies/edit/:id',
+                name: 'movies-edit',
+                component: EditMovieView
+            },
+        ]
     },
-    {
-        path: '/list',
-        name: 'list',
-        component: ListMoviesView
-    },
-    {
-        path: '/edit/:id',
-        name: 'edit',
-        component: EditMovieView
-    }
 ]
 
 const router = createRouter({
