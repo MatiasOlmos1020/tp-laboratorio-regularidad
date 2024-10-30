@@ -36,7 +36,7 @@
 
 
 <script>
-import { getAllMovies, deletMovie } from '../../services/moviesService';
+import { getAllMovies } from '../../services/moviesService';
 
 export default {
     data() {

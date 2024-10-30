@@ -40,7 +40,7 @@
 
 
 <script>
-import { getMovieByID, deletMovie, editMovie } from '../../services/moviesService';
+import { getMovieByID, deleteMovie, editMovie } from '../../services/moviesService.js';
 import ConfirmDeleteComponent from '../../components/ConfirmDeleteComponent.vue';
 
 export default {
@@ -79,7 +79,7 @@ export default {
         },
         async onConfirmDelete() {
             this.showModal = false;
-            await deletMovie(this.id);
+            await deleteMovie(this.id);
             this.handleClose()
         },
         onCancelDelete() {

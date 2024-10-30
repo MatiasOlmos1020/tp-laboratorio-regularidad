@@ -51,7 +51,7 @@
 
 
 <script>
-import { getActorByID, deletActor, editActor } from '../../services/ActorsService';
+import { getActorByID, deleteActor, editActor } from '../../services/ActorsService';
 import ConfirmDeleteComponent from '../../components/ConfirmDeleteComponent.vue';
 
 export default {
@@ -96,8 +96,9 @@ export default {
         },
         async onConfirmDelete() {
             this.showModal = false;
-            await deletActor(this.id);
-            this.this.handleClose()
+            let res = await deleteActor(this.id);
+            console.log(res);
+            await this.handleClose()
         },
         onCancelDelete() {
             this.showModal = false;
