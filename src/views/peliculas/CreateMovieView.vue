@@ -59,6 +59,7 @@ export default {
             score: null,
             synopsis: '',
             actors: '',
+            
             msg: '',
             loading: false,
             allActors: [],
