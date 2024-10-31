@@ -5,10 +5,15 @@ import EditMovieView from "../views/peliculas/EditMovieView.vue";
 import CreateActorsView from "../views/actors/CreateActorView.vue"
 import ListActorsView from "../views/actors/ListActorsView.vue";
 import EditActorView from "../views/actors/EditActorView.vue";
+import FeedView from   "../views/FeedView.vue"
 
 const routes = [
 
-
+    {
+        path: '/',
+        name: 'home',
+        component: FeedView
+    },
     {
         path: '/movies',
         name: 'movies',

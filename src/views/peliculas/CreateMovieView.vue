@@ -29,8 +29,9 @@
                     <label class="form-label">Actores</label>
                     <div class="d-flex gap-2 flex-wrap">
                         <span v-for="actor in allActors" :key="actor.idcod" @click="linkActor(actor.idcod)"
-                            class="badge text-white p-2" :class="actors.includes(actor.idcod) ? 'bg-primary' : 'bg-primary'">{{
-                            actor.param1 }}</span>
+                            class="badge text-white p-2" :class="actors.includes(actor.idcod) ? 'bg-primary' : 'bg-secondary'">{{
+                            actor.param1 }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -42,7 +43,6 @@
             </div>
         </template>
     </form>
-    {{ actors }}
 </template>
 
 

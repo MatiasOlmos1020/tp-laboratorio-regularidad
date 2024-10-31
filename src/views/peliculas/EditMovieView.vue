@@ -4,26 +4,37 @@
         <h4 class="mb-4 text-center">Editar Película</h4>
         <span>{{ msg }}</span>
         <template v-if="!loading">
-            <div class="mb-3">
-                <label class="form-label" for="title">Nombre</label>
-                <input v-model="title" type="text" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Puntuación</label>
-                <div class="d-flex align-items-center gap-2">
-                    <label v-for="i in 5" :key="i" class="form-check form-check-inline">
-                        <input v-model="score" :value="i" type="radio" class="form-check-input" name="score" />
-                        <span class="form-check-label">{{ i }}</span>
-                    </label>
+            <div class="row">
+                <div class="mb-3 col-12">
+                    <label class="form-label" for="title">Nombre</label>
+                    <input v-model="title" type="text" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
                 </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="synopsis">Sinopsis</label>
-                <textarea v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
-            <div class="mt-3">
-                <button @click.prevent="showModal = true" class="btn btn-danger w-100">Eliminar Película</button>
+                <div class="mb-3 col-12">
+                    <label class="form-label">Puntuación</label>
+                    <div class="d-flex align-items-center gap-2">
+                        <label v-for="i in 5" :key="i" class="form-check form-check-inline">
+                            <input v-model="score" :value="i" type="radio" class="form-check-input" name="score" />
+                            <span class="form-check-label">{{ i }}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3 col-12">
+                    <label class="form-label" for="synopsis">Sinopsis</label>
+                    <textarea v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
+                </div>
+                <div class="mb-3 col-12">
+                        <label class="form-label">Actores</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <span v-for="actor in allActors" :key="actor.idcod" @click="linkActor(actor.idcod)"
+                                class="badge text-white p-2" :class="actors.includes(actor.idcod) ? 'bg-primary' : 'bg-secondary'">{{
+                                actor.param1 }}
+                            </span>
+                        </div>
+                    </div>
+                <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                <div class="mt-3">
+                    <button @click.prevent="showModal = true" class="btn btn-danger w-100">Eliminar Película</button>
+                </div>
             </div>
         </template>
         <template v-else>
@@ -32,7 +43,7 @@
             </div>
         </template>
     </form>
-    <ConfirmDeleteComponent :isOpen="showModal" message="Por favor, confirme que quiere eliminar la Pelicula" @confirm="onConfirmDelete"
+    <ConfirmDeleteComponent class="col-12" :isOpen="showModal" message="Por favor, confirme que quiere eliminar la Pelicula" @confirm="onConfirmDelete"
         @cancel="onCancelDelete"></ConfirmDeleteComponent>
 </template>
 
@@ -51,6 +62,7 @@ export default {
             title: '',
             score: null,
             synopsis: '',
+            actors: '',
             allActors: '',
             msg: '',
             loading: false,
@@ -87,7 +99,16 @@ export default {
         },
         onCancelDelete() {
             this.showModal = false;
-        }
+        },
+        linkActor(id) {
+            let idsArray = this.actors.trim().split(" ");
+            if (idsArray.includes(id)) {
+                idsArray = idsArray.filter(item => item !== id);
+            } else {
+                idsArray.push(id);
+            }
+            this.actors = idsArray.join(" ");
+        },
     },
     async created() {
         let actorsRes = await getAllActors();
@@ -96,11 +117,10 @@ export default {
         this.msg = '';
         this.loading = true;
         let moviesRes = await getMovieByID(this.$route.params.id)
-        console.log(moviesRes);
         this.title = moviesRes.param1;
         this.score = moviesRes.param2;
         this.synopsis = moviesRes.param3;
-        this.allActors = moviesRes.param4;
+        this.actors = moviesRes.param4;
         this.loading = false;
     },
     components: {
