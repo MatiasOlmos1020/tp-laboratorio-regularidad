@@ -3,16 +3,18 @@ import apiClient from "../client";
 export async function createMovie(data) {
     try {
         const res = await apiClient.post('/peliculas', JSON.stringify(data));
-        console.log(res);
         return res.data;
     } catch (error) {
         return error;
     }
 }
 
-export async function getMovieByID(id){
+export async function getMovieByID(id) {
     try {
-        const res = await apiClient.get(`/peliculas/${id}`);
+        let res = await apiClient.get(`/peliculas/${id}`);
+        let idsArray = res.data.param4.trim().split(" ");
+        res.data.param4 = idsArray
+
         return res.data;
     } catch (error) {
         return error
@@ -21,7 +23,11 @@ export async function getMovieByID(id){
 
 export async function getAllMovies() {
     try {
-        const res = await apiClient.get('/peliculas');
+        let res = await apiClient.get('/peliculas');
+        res.data.forEach(element => {
+            element.param4 = element.param4.trim().split(" ");
+        });
+
         return res.data;
     } catch (error) {
         return error
@@ -31,7 +37,7 @@ export async function getAllMovies() {
 export async function editMovie(data) {
     try {
         const res = await apiClient.patch('/peliculas', JSON.stringify(data));
-        console.log(res);
+
         return res.data;
     } catch (error) {
         return error;
@@ -41,12 +47,12 @@ export async function editMovie(data) {
 export async function deleteMovie(id) {
     try {
         const data = {
-            data:{
+            data: {
                 idcod: id
             }
         };
-          const res = await apiClient.delete('/peliculas', data);
-          return res.data;
+        const res = await apiClient.delete('/peliculas', data);
+        return res.data;
     } catch (error) {
         return error
     }

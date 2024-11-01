@@ -58,7 +58,7 @@ export default {
             title: '',
             score: null,
             synopsis: '',
-            actors: '',
+            actors: [],
             
             msg: '',
             loading: false,
@@ -74,7 +74,7 @@ export default {
                     "param1": this.title,
                     "param2": this.score.toString(),
                     "param3": this.synopsis,
-                    "param4": this.actors,
+                    "param4": this.actors.join(" "),
                 }
                 let res = await createMovie(data)
                 console.log(res);
@@ -90,13 +90,11 @@ export default {
             this.$router.push({ name: 'movies-list' });
         },
         linkActor(id) {
-            let idsArray = this.actors.trim().split(" ");
-            if (idsArray.includes(id)) {
-                idsArray = idsArray.filter(item => item !== id);
+            if (this.actors.includes(id)) {
+                this.actors = this.actors.filter(item => item !== id);
             } else {
-                idsArray.push(id);
+                this.actors.push(id);
             }
-            this.actors = idsArray.join(" ");
         },
     },
     async created() {

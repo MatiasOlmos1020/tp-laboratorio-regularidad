@@ -1,13 +1,15 @@
 <template>
     <form @submit.prevent="handleSubmit" class="p-4 bg-light rounded shadow-sm position-relative">
-        <router-link :to="{ name: 'movies-list' }" class="btn-close position-absolute top-0 end-0 m-2" aria-label="Close"></router-link>
+        <router-link :to="{ name: 'movies-list' }" class="btn-close position-absolute top-0 end-0 m-2"
+            aria-label="Close"></router-link>
         <h4 class="mb-4 text-center">Editar Película</h4>
         <span>{{ msg }}</span>
         <template v-if="!loading">
             <div class="row">
                 <div class="mb-3 col-12">
                     <label class="form-label" for="title">Nombre</label>
-                    <input v-model="title" type="text" maxlength="100" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
+                    <input v-model="title" type="text" maxlength="100" class="form-control" id="title"
+                        placeholder="Introduce el nombre de la película" />
                 </div>
                 <div class="mb-3 col-12">
                     <label class="form-label">Puntuación</label>
@@ -20,19 +22,21 @@
                 </div>
                 <div class="mb-3 col-12">
                     <label class="form-label" for="synopsis">Sinopsis</label>
-                    <textarea maxlength="100" v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
+                    <textarea maxlength="100" v-model="synopsis" class="form-control" id="synopsis"
+                        placeholder="Escribe la sinopsis de la película"></textarea>
                 </div>
                 <div class="mb-3 col-12">
-                        <label class="form-label">Actores</label>
-                        <div class="d-flex gap-2 flex-wrap">
-                            <span v-for="actor in allActors" :key="actor.idcod" @click="linkActor(actor.idcod)"
-                                class="badge text-white p-2" :class="actors.includes(actor.idcod) ? 'bg-primary' : 'bg-secondary'">{{
+                    <label class="form-label">Actores</label>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <span v-for="actor in allActors" :key="actor.idcod" @click="linkActor(actor.idcod)"
+                            class="badge text-white p-2"
+                            :class="actors.includes(actor.idcod) ? 'bg-primary' : 'bg-secondary'">{{
                                 actor.param1 }}
-                            </span>
-                        </div>
+                        </span>
                     </div>
-                <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                </div>
                 <div class="mt-3">
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Guardar Cambios</button>
                     <button @click.prevent="showModal = true" class="btn btn-danger w-100">Eliminar Película</button>
                 </div>
             </div>
@@ -43,7 +47,8 @@
             </div>
         </template>
     </form>
-    <ConfirmDeleteComponent class="col-12" :isOpen="showModal" message="Por favor, confirme que quiere eliminar la Pelicula" @confirm="onConfirmDelete"
+    <ConfirmDeleteComponent class="col-12" :isOpen="showModal"
+        message="Por favor, confirme que quiere eliminar la Pelicula" @confirm="onConfirmDelete"
         @cancel="onCancelDelete"></ConfirmDeleteComponent>
 </template>
 
@@ -62,7 +67,8 @@ export default {
             title: '',
             score: null,
             synopsis: '',
-            actors: '',
+            actors: [],
+
             allActors: '',
             msg: '',
             loading: false,
@@ -79,7 +85,7 @@ export default {
                     "param1": this.title,
                     "param2": this.score.toString(),
                     "param3": this.synopsis,
-                    "param4": this.actors,
+                    "param4": this.actors.join(" "),
                 }
                 await editMovie(data)
                 this.loading = false;
@@ -93,21 +99,19 @@ export default {
             this.$router.push({ name: 'movies-list' })
         },
         async onConfirmDelete() {
-            this.showModal = false;
             await deleteMovie(this.id);
+            this.showModal = false;
             this.handleClose()
         },
         onCancelDelete() {
             this.showModal = false;
         },
         linkActor(id) {
-            let idsArray = this.actors.trim().split(" ");
-            if (idsArray.includes(id)) {
-                idsArray = idsArray.filter(item => item !== id);
+            if (this.actors.includes(id)) {
+                this.actors = this.actors.filter(item => item !== id);
             } else {
-                idsArray.push(id);
+                this.actors.push(id);
             }
-            this.actors = idsArray.join(" ");
         },
     },
     async created() {

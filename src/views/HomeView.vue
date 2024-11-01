@@ -43,14 +43,7 @@ export default {
             }
         },
         validateFilter(idsArray) {
-            let validation;
-            idsArray = idsArray.trim().split(" ")
-            if (this.filter.length > 0) {
-                idsArray.forEach(element => {
-                    validation = !this.filter.includes(element) ? false : true
-                });
-            } else { validation = true }
-            return validation;
+            return this.filter.length === 0 || idsArray.some(element => this.filter.includes(element));
         }
     },
     async created() {
