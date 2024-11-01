@@ -49,7 +49,7 @@ export default {
                 idsArray.forEach(element => {
                     validation = !this.filter.includes(element) ? false : true
                 });
-            } else { validation = true }0
+            } else { validation = true }
             return validation;
         }
     },

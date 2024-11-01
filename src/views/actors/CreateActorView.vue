@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="mb-3 col-12">
                     <label class="form-label" for="name">Nombre</label>
-                    <input v-model="name" type="text" class="form-control" id="name"
+                    <input v-model="name" type="text" maxlength="100" class="form-control" id="name"
                         placeholder="Introduce el nombre de el actor" />
                 </div>
                 <div class="mb-3 col-6">

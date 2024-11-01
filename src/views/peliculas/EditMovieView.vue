@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="mb-3 col-12">
                     <label class="form-label" for="title">Nombre</label>
-                    <input v-model="title" type="text" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
+                    <input v-model="title" type="text" maxlength="100" class="form-control" id="title" placeholder="Introduce el nombre de la película" />
                 </div>
                 <div class="mb-3 col-12">
                     <label class="form-label">Puntuación</label>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="mb-3 col-12">
                     <label class="form-label" for="synopsis">Sinopsis</label>
-                    <textarea v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
+                    <textarea maxlength="100" v-model="synopsis" class="form-control" id="synopsis" placeholder="Escribe la sinopsis de la película"></textarea>
                 </div>
                 <div class="mb-3 col-12">
                         <label class="form-label">Actores</label>
